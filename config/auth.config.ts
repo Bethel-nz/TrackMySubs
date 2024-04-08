@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { NextResponse } from 'next/server';
-import Google from 'next-auth/providers/google';
+import GoogleProvider from '@auth/core/providers/google';
 import prisma from '../prisma/client';
 const bcrypt = require('bcryptjs');
 
@@ -17,7 +17,10 @@ export default {
     newUser: '/auth/sign-up',
   },
   providers: [
-    Google,
+    GoogleProvider({
+      clientId: process.env.AUTH_GOOGLE_ID as string,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
+    }),
     CredentialsProvider({
       name: 'credentials',
       credentials: {

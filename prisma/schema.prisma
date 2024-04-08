@@ -35,14 +35,16 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String                 @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?                @unique
   emailVerified DateTime?
   password      String?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  bills         Bill[]
+  reminders     SubscriptionReminder[]
 }
 
 model VerificationToken {
@@ -51,4 +53,32 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Bill {
+  id              String   @id @default(cuid())
+  serviceProvider String // Name of the service (e.g., "Netflix", "Spotify")
+  plan            String // Plan level (e.g., "Basic", "Premium")
+  price           String // Monthly or annual cost - tried using Float but i kept getting expected string not number
+  nextBillingDate DateTime
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  isPaid          Boolean  @default(true)
+  isRecurring     Boolean  @default(true) // Auto-renews or one-time payment 
+  notes           String
+}
+
+model SubscriptionReminder {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan       String
+  serviceProvider String
+  name       String
+  price      String
+  notes      String
+  expiryDate DateTime
+  notified   Boolean  @default(false) // To track if notification was sent
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

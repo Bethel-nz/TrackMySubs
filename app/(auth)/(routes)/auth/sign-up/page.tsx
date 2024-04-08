@@ -1,11 +1,15 @@
 import React from 'react';
 import RegisterForm from '@/components/auth/ui/register-form';
 
+import { SparklesView } from '@/components/auth/ui/sparkles-background';
+
 export default function page() {
   return (
-    <div className='bg-gradient-to-br from-indigo-600 via-cyan-600 to-teal-200 h-screen w-screen flex justify-center items-center'>
+    <div className=' h-screen w-screen flex justify-center items-center'>
       <div>
-        <RegisterForm />
+        <SparklesView>
+          <RegisterForm />
+        </SparklesView>
       </div>
     </div>
   );

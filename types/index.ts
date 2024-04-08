@@ -19,10 +19,24 @@ const registerFormSchema = z.object({
     message: 'Password must be at least 6 characters',
   }),
 });
-
+const billSchema = z.object({
+  serviceProvider: z.string(),
+  plan: z.string(),
+  price: z.string(),
+  nextBillingDate: z.date(),
+  isRecurring: z.boolean(),
+  notes: z
+    .string()
+    .min(4, {
+      message: 'Note must be at least 10 characters.',
+    })
+    .max(160, {
+      message: 'Note must not be longer than 30 characters.',
+    }),
+});
 type props = {
   children: ReactNode;
 };
 
-export { loginFormSchema, registerFormSchema };
+export { loginFormSchema, registerFormSchema, billSchema };
 export { type props };

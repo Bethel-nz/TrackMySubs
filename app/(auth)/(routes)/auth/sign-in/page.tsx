@@ -1,11 +1,14 @@
 import React from 'react';
 import LoginForm from '@/components/auth/ui/login-form';
+import { SparklesView } from '@/components/auth/ui/sparkles-background';
 
 export default function page() {
   return (
-    <div className='bg-gradient-to-t from-blue-700 via-violet-500 to-violet-500 h-screen w-screen flex justify-center items-center'>
+    <div className=' h-screen w-screen flex justify-center items-center'>
       <div>
-        <LoginForm />
+        <SparklesView>
+          <LoginForm />
+        </SparklesView>
       </div>
     </div>
   );

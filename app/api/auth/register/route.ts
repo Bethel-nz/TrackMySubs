@@ -12,6 +12,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { name, email, password } = body;
+    console.log(body,'user from values',name)
     const hashPassword: string = await bcrypt.hash(password, 10);
     const exists = await prisma.user.findUnique({
       where: {
@@ -19,10 +20,7 @@ export async function POST(req: Request) {
       },
     });
     if (exists) {
-      return NextResponse.json(
-        { error: 'User already exists' },
-        { status: 400 }
-      );
+      return NextResponse.json('User already exists', { status: 409 });
     }
     const user = await prisma.user.create({
       data: {
@@ -32,7 +30,7 @@ export async function POST(req: Request) {
         emailVerified: new Date(),
       },
     });
-    return NextResponse.json(user);
+    return NextResponse.json(user, { status: 200 });
   } catch (error) {
     return NextResponse.json(error);
   }
