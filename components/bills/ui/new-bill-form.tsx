@@ -53,7 +53,7 @@ export default function NewBillForm() {
   async function onSubmit(values: z.infer<typeof billSchema>) {
     setLoading(true);
     try {
-      const res = await axios.post(`/api/bills/new`, JSON.stringify({...values}));
+      const res = await axios.post(`/api/bills/new`, JSON.stringify({...values, price:parseFloat(values.price)}));
       if (res.status === 200) {
         toast(`${res.data}`, {
           action: {

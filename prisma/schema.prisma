@@ -59,12 +59,12 @@ model Bill {
   id              String   @id @default(cuid())
   serviceProvider String // Name of the service (e.g., "Netflix", "Spotify")
   plan            String // Plan level (e.g., "Basic", "Premium")
-  price           String // Monthly or annual cost - tried using Float but i kept getting expected string not number
+  price           Decimal // Monthly or annual cost
   nextBillingDate DateTime
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
   isPaid          Boolean  @default(true)
-  isRecurring     Boolean  @default(true) // Auto-renews or one-time payment 
+  isRecurring     Boolean  @default(true) // Monthly or yearly
   notes           String
 }
 
@@ -75,7 +75,7 @@ model SubscriptionReminder {
   plan       String
   serviceProvider String
   name       String
-  price      String
+  price           Decimal // Monthly or annual cost
   notes      String
   expiryDate DateTime
   notified   Boolean  @default(false) // To track if notification was sent

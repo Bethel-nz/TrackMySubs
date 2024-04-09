@@ -28,6 +28,9 @@ export async function GET() {
       }, {})
     );
 
+  const convertDecimalToNumber = (decimal: any): number => {
+  return parseFloat(decimal.unsignedInt + '.' + decimal.unsignedIntNano);
+};
     const remindersToCreate = billsGroupedByUserId.map((billsForUser: any) => {
       return {
         name: billsForUser[0].user.name as string,
@@ -36,9 +39,9 @@ export async function GET() {
         expiryDate: billsForUser[0].nextBillingDate,
         userId: billsForUser[0].userId,
         notes: billsForUser[0].notes,
-        price: billsForUser.reduce((total: string, bill: Bill) => {
-          const price = Number(total) + Number(bill.price);
-          return price.toString();
+        price: billsForUser.reduce((total: number, bill: Bill) => {
+           const price = total + convertDecimalToNumber(bill.price);
+          return price;
         }, ''),
       };
     });

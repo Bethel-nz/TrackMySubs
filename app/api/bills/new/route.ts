@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { auth } from 'auth';
 import { billSchema } from '@/types';
 import { NextApiRequest, NextApiResponse } from 'next';
+import {  Prisma } from '@prisma/client'
 
 export async function POST(
   req: NextApiRequest & Request,
@@ -35,7 +36,7 @@ export async function POST(
       data: {
         serviceProvider,
         plan,
-        price,
+        price:new Prisma.Decimal(price),
         nextBillingDate,
         isRecurring,
         notes,

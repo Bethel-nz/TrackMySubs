@@ -83,7 +83,7 @@ export const columns: ColumnDef<Bill>[] = [
         currency: 'USD',
       }).format(amount);
 
-      return <div className={'text-center'}>{formatted.toString()}</div>;
+      return <div className={'text-center'}>{parseFloat(formatted)}</div>;
     },
   },
   {
