@@ -78,13 +78,8 @@ export const columns: ColumnDef<Bill>[] = [
     },
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue('price'));
-      console.log(amount)
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(amount);
 
-      return <div className={'text-center'}>{parseFloat(formatted)}</div>;
+      return <div className={'text-center'}>${parseFloat(amount)}</div>;
     },
   },
   {
