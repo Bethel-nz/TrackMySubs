@@ -78,8 +78,7 @@ export const columns: ColumnDef<Bill>[] = [
     },
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue('price'));
-
-      return <div className={'text-center'}>${parseFloat(amount)}</div>;
+      return <div className={'text-center'}>${amount}</div>;
     },
   },
   {
