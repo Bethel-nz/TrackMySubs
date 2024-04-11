@@ -43,7 +43,6 @@ export async function POST(
         userId: user!.id as string,
       },
     });
-    console.log(createdBill);
     return NextResponse.json('Bill Created', { status: 200 });
   } catch (error: any) {
     console.log('Error Occurred', error!.message);

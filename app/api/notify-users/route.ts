@@ -28,9 +28,9 @@ export async function GET() {
       }, {})
     );
 
-  const convertDecimalToNumber = (decimal: any): number => {
-  return parseFloat(decimal.unsignedInt + '.' + decimal.unsignedIntNano);
-};
+    const convertDecimalToNumber = (decimal: any): number => {
+      return parseFloat(decimal.unsignedInt + '.' + decimal.unsignedIntNano);
+    };
     const remindersToCreate = billsGroupedByUserId.map((billsForUser: any) => {
       return {
         name: billsForUser[0].user.name as string,
@@ -40,22 +40,11 @@ export async function GET() {
         userId: billsForUser[0].userId,
         notes: billsForUser[0].notes,
         price: billsForUser.reduce((total: number, bill: Bill) => {
-           const price = total + convertDecimalToNumber(bill.price);
+          const price = total + convertDecimalToNumber(bill.price);
           return price;
-        }, ''),
+        }, 0),
       };
     });
-
-    // // Check if subscription reminders already exist for the next 7 days
-    // const existingReminders = await prisma.subscriptionReminder.findMany({
-    //   where: {
-    //     notified: false,
-    //     expiryDate: {
-    //       gte: moment().toDate(),
-    //       lt: moment().add(7, 'days').toDate(),
-    //     },
-    //   },
-    // });
 
     await prisma.bill.updateMany({
       where: {
