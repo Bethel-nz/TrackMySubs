@@ -59,7 +59,7 @@ model Bill {
   id              String   @id @default(cuid())
   serviceProvider String // Name of the service (e.g., "Netflix", "Spotify")
   plan            String // Plan level (e.g., "Basic", "Premium")
-  price           Decimal // Monthly or annual cost
+  price           String // Monthly or annual cost
   nextBillingDate DateTime
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
@@ -69,16 +69,16 @@ model Bill {
 }
 
 model SubscriptionReminder {
-  id         String   @id @default(cuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  plan       String
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan            String
   serviceProvider String
-  name       String
-  price           Decimal // Monthly or annual cost
-  notes      String
-  expiryDate DateTime
-  notified   Boolean  @default(false) // To track if notification was sent
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  name            String
+  price           String
+  notes           String
+  expiryDate      DateTime
+  notified        Boolean  @default(false) // To track if notification was sent
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

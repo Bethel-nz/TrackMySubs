@@ -12,7 +12,6 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { name, email, password } = body;
-    console.log(body,'user from values',name)
     const hashPassword: string = await bcrypt.hash(password, 10);
     const exists = await prisma.user.findUnique({
       where: {

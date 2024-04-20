@@ -8,6 +8,10 @@ import { Bill } from '@prisma/client';
 
 export async function GET() {
   try {
+    await prisma.subscriptionReminder.deleteMany({
+      where: { notified: true },
+    });
+
     const bills = await prisma.bill.findMany({
       where: {
         nextBillingDate: {
@@ -28,9 +32,6 @@ export async function GET() {
       }, {})
     );
 
-    const convertDecimalToNumber = (decimal: any): number => {
-      return parseFloat(decimal.unsignedInt + '.' + decimal.unsignedIntNano);
-    };
     const remindersToCreate = billsGroupedByUserId.map((billsForUser: any) => {
       return {
         name: billsForUser[0].user.name as string,
@@ -39,10 +40,11 @@ export async function GET() {
         expiryDate: billsForUser[0].nextBillingDate,
         userId: billsForUser[0].userId,
         notes: billsForUser[0].notes,
-        price: billsForUser.reduce((total: number, bill: Bill) => {
-          const price = total + convertDecimalToNumber(bill.price);
+        price: billsForUser.reduce((total: string, bill: Bill) => {
+          const price = total + bill.price;
+
           return price;
-        }, 0),
+        }, ''),
       };
     });
 
@@ -50,7 +52,7 @@ export async function GET() {
       where: {
         nextBillingDate: {
           gte: moment().toDate(),
-          lt: moment().add(7, 'days').toDate(),
+          lt: moment().add(3, 'days').toDate(),
         },
         isPaid: true,
       },
@@ -62,26 +64,22 @@ export async function GET() {
     await prisma.subscriptionReminder.createMany({
       data: remindersToCreate,
     });
+    console.log(await prisma.subscriptionReminder.findMany());
 
     const reminders = await prisma.subscriptionReminder.findMany({
       where: {
         notified: false,
       },
     });
+    console.log(reminders);
 
     for (const reminder of reminders) {
+      await pusherServer.trigger(reminder.userId, 'notification', reminder);
       await prisma.subscriptionReminder.update({
         where: { id: reminder.id },
         data: { notified: true },
       });
-      await pusherServer.trigger(reminder.userId, 'notification', reminder);
-      if (moment().isAfter(moment(reminder.createdAt).add(7, 'days'))) {
-        await prisma.subscriptionReminder.delete({
-          where: { id: reminder.id, notified: true },
-        });
-      }
     }
-
     return NextResponse.json({
       message: 'Subscriptions checked and notifications sent',
       reminders,

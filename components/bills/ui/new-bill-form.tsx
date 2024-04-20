@@ -53,7 +53,10 @@ export default function NewBillForm() {
   async function onSubmit(values: z.infer<typeof billSchema>) {
     setLoading(true);
     try {
-      const res = await axios.post(`/api/bills/new`, JSON.stringify({...values, price:parseFloat(values.price)}));
+      const res = await axios.post(
+        `/api/bills/new`,
+        JSON.stringify(values)
+      );
       if (res.status === 200) {
         toast(`${res.data}`, {
           action: {
@@ -194,12 +197,7 @@ export default function NewBillForm() {
             name='notes'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  Notes -{' '}
-                  <span className={'text-sm text-muted-foreground'}>
-                    (optional)
-                  </span>
-                </FormLabel>
+                <FormLabel>Note</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder='Add any additional details, special promo codes, or reminders about this subscription.'

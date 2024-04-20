@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "yarn prisma generate && yarn prisma db push --force-reset && next build",
+    "dev": "bunx prisma generate && bunx prisma db push --force-reset && next dev",
+    "build": "bunx prisma generate && bunx prisma db push --force-reset && next build",
     "start": "next start",
     "lint": "next lint"
   },
