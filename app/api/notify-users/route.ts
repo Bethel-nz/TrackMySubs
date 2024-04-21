@@ -40,11 +40,11 @@ export async function GET() {
         expiryDate: billsForUser[0].nextBillingDate,
         userId: billsForUser[0].userId,
         notes: billsForUser[0].notes,
-        price: billsForUser.reduce((total: string, bill: Bill) => {
-          const price = total + bill.price;
+        price: billsForUser.reduce((total: number, bill: Bill) => {
+          const price = total + parseFloat(bill.price);
 
-          return price;
-        }, ''),
+          return String(price);
+        }, 0),
       };
     });
 
